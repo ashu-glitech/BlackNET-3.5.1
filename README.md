@@ -13,6 +13,8 @@ Free advanced and modern Windows botnet with a nice and secure PHP panel develop
 
 # This Project is Deprecated
 
+This Project will be updated when needed
+
 ## What You Can Do
  1. Upload File
  2. DDOS Attack [ TCP,UDP,ARME,Slowloris, HTTPGet, POSTHttp, Bandwidth Flood ]
