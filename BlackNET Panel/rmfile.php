@@ -16,6 +16,7 @@ try {
             $utils->redirect("viewuploads.php?vicid=" . $utils->sanitize($_POST['vicid']) . "&msg=csrf");
         }
     } else {
+        $file = $_GET['fname'];
         if (strpos($file, "..")) {
             $file = str_replace(["..", "/"], [null, null], $file);
         }
