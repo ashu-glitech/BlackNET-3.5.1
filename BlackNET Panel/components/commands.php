@@ -5,18 +5,10 @@
       Commands Center
     </div>
     <div class="card-body">
-      <div class="table-responsive pb-4">
-        <table class="table table-bordered" width="100%" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Command</th>
-              <th>Execute</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <select class="form-control" id="command" name="command">
+      <div style="height: 150px;" class="pt-4">
+		  <div class="row">
+			  <div class="col-lg-8 col-md-4 col-sm-12">
+ <select class="form-control" id="command" name="command">
                   <option value="nocommand" selected>Select Command</option>
                   <optgroup label="Clients Commands">
                     <option value="ping">Ping</option>
@@ -68,8 +60,9 @@
                     <option value="uninstall">Uninstall</option>
                   </optgroup>
                 </select>
-              </td>
-              <td>
+			  </div>
+			  
+			  <div class="col-lg-4 col-md-8 col-sm-12">
                 <button
                   type="submit"
                   name="Form1"
@@ -77,11 +70,12 @@
                   class="btn btn-block btn-dark"
                 >
                   Send Command
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </button>			  
+			  </div>
+		  </div>
+               
+
+
       </div>
     </div>
   </div>
