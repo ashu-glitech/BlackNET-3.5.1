@@ -13,7 +13,9 @@ Free advanced and modern Windows botnet with a nice and secure PHP panel develop
 
 # This Project is Deprecated
 
-This Project will be updated when needed
+This repository will be updated when needed.
+
+No major features will be added just bug fixes.
 
 ## What You Can Do
  1. Upload File
