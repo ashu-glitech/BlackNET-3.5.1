@@ -11,8 +11,6 @@ Free advanced and modern Windows botnet with a nice and secure PHP panel develop
 
 ## About BlackNET
 
-# This Project is Deprecated
-
 This repository will be updated when needed.
 
 No major features will be added just bug fixes.
